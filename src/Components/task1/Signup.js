@@ -6,7 +6,7 @@ const SignUp = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen">
       <div className="hidden md:flex md:flex-1 items-center justify-center bg-gray-100">
-        <img src={Image} alt="This is an Image" className="max-w-full h-auto" />
+        <img src={Image} alt="This is an Img" className="max-w-full h-auto" />
       </div>
       <div className="flex-1 flex flex-col justify-center p-8 bg-white">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
@@ -18,7 +18,6 @@ const SignUp = () => {
             <input
               type="text"
               name="fullname"
-              placeholder="Ram "
               className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-indigo-500"
               required
             />

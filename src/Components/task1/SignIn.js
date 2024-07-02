@@ -1,8 +1,31 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Image from "../../Assets/Log_in.png";
+import { auth, provider } from "./firebase.config";
+import { signInWithPopup } from "firebase/auth";
 
-const SignUp = () => {
+const SignIn = () => {
+  const [value, setValue] = useState("");
+  const navigate = useNavigate();
+
+  const handleClick = async () => {
+    try {
+      const data = await signInWithPopup(auth, provider);
+      setValue(data.user.email);
+      localStorage.setItem("email", data.user.email);
+      navigate("/home"); // Navigate to Home component after successful sign-in
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+    }
+  };
+
+  useEffect(() => {
+    setValue(localStorage.getItem("email"));
+    if (localStorage.getItem("email")) {
+      navigate("/home"); // Navigate to Home if the user is already signed in
+    }
+  }, [navigate]);
+
   return (
     <div className="flex flex-col md:flex-row h-screen">
       {/* Left Div with Image */}
@@ -29,23 +52,12 @@ const SignUp = () => {
             />
           </div>
 
-          {/* Password Input */}
-          <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-indigo-500"
-              required
-            />
-          </div>
-
-          {/* Forgot Password Link */}
-          <div className="text-sm text-gray-600">
-            <Link to="/forgot-password">Forgot password?</Link>
-          </div>
+          <button
+            type="submit"
+            className="w-full px-4 py-2 text-white bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4"
+          >
+            Receive OTP
+          </button>
 
           {/* Separator -OR- */}
           <div className="flex items-center mt-4">
@@ -57,6 +69,7 @@ const SignUp = () => {
           {/* Sign with Google Option */}
           <button
             type="button"
+            onClick={handleClick}
             className="flex items-center justify-center space-x-2 px-4 py-2 bg-blue-500 text-white border border-blue-500 rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             <svg
@@ -71,23 +84,17 @@ const SignUp = () => {
                 clipRule="evenodd"
               />
             </svg>
-            <span>Sign in with Google</span>
+            Sign in with Google
           </button>
 
           {/* Sign Up Button */}
-          <button
-            type="submit"
-            className="w-full px-4 py-2 text-white bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4"
-          >
-            Submit
-          </button>
         </form>
 
         {/* Already have an account? Sign in Link */}
         <p className="mt-4 text-sm text-gray-600 text-center md:text-left">
           Does not have an Account?{" "}
           <Link to="/signup" className="text-indigo-600 hover:underline">
-            Sign in
+            Sign up
           </Link>
         </p>
       </div>
@@ -95,4 +102,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
